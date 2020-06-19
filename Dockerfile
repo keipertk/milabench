@@ -1,4 +1,4 @@
-ARG FROM_IMAGE_NAME=nvcr.io/nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04
+ARG FROM_IMAGE_NAME=[link to internal nvidia image]
 FROM ${FROM_IMAGE_NAME}
 
 # Install dependencies for system configuration logger
@@ -19,9 +19,10 @@ COPY . .
 RUN ./scripts/install-apt-packages.sh
 RUN ./scripts/install_conda.sh --no-init
 
-ENV PATH=/root/anaconda3/bin:$PATH
+ENV PATH=/opt/conda/bin/:$PATH
 
-RUN conda create -n mlperf python=3.7 -y
+#RUN conda create -n mlperf python=3.7 -y
+RUN conda create --name mlperf --clone root
 
 SHELL ["conda", "run", "-n", "mlperf", "/bin/bash", "-c"]
 RUN conda install poetry -y
